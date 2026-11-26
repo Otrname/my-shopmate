@@ -1,0 +1,39 @@
+{
+  "SO20261101": {
+    "customer_id": "C1001",
+    "status": "已签收",
+    "items": [
+      {"name": "降噪蓝牙耳机 Pro 2", "qty": 1, "price": 89.0}
+    ],
+    "total": 89.0,
+    "currency": "USD"
+  },
+  "SO20261115": {
+    "customer_id": "C1001",
+    "status": "运输中",
+    "items": [
+      {"name": "20000mAh 快充移动电源", "qty": 2, "price": 35.5}
+    ],
+    "total": 71.0,
+    "currency": "USD"
+  },
+  "SO20261120": {
+    "customer_id": "C1002",
+    "status": "已付款",
+    "items": [
+      {"name": "智能手表 S3", "qty": 1, "price": 129.0}
+    ],
+    "total": 129.0,
+    "currency": "EUR"
+  },
+  "SO20261003": {
+    "customer_id": "C1003",
+    "status": "已签收",
+    "items": [
+      {"name": "65W 氮化镓充电器", "qty": 1, "price": 3980.0},
+      {"name": "Type-C 数据线", "qty": 2, "price": 990.0}
+    ],
+    "total": 5960.0,
+    "currency": "JPY"
+  }
+}
