@@ -24,7 +24,7 @@ for item in items:       # 挨个处理
 **踩过的坑**：
 - `items[10]` 报 `IndexError: list index out of range`。原因：列表只有 3 个元素，编号是 0–2，10 超出范围。解决：取之前先确认编号小于 `len(items)`。
 
-**我的理解**：
+**我的理解**：列表就是按顺序不重复的一些值,可以增删改查
 
 ---
 
@@ -54,7 +54,7 @@ for key, value in order.items():
 - `order["refund"]` 报 `KeyError: 'refund'`。原因：字典里没有这个键。解决：不确定键在不在时用 `order.get("refund")`。
 
 **我的理解**：
-
+字典就是一个键对应一个值,没有重复的键,可通过键找值,字典中也可以有列表等其他字段穿插
 ---
 
 ### 3. JSON
@@ -75,7 +75,7 @@ text = json.dumps(data, ensure_ascii=False)   # 字典 → 文本（中文不转
 **踩过的坑**：
 
 **我的理解**：
-
+json合适就是一段文字,可以转化为别的数据类型,比如字典,就可以方便查值了
 ---
 
 ### 4. 读文件
@@ -95,7 +95,7 @@ with open("data/orders.json", encoding="utf-8") as f:
 - 在主目录运行 `uv run ~/Desktop/my-shopmate/practice/lesson1.py` 报 `FileNotFoundError: ... 'data/orders.json'`。原因：`open` 里写的是**相对路径**，Python 从**运行命令时所在的文件夹**（主目录）去找，主目录下没有 `data` 文件夹。解决：先 `cd` 进项目文件夹再运行。
 
 **我的理解**：
-
+打开文件后可以自动关闭,但是得注意打开文件路径
 ---
 
 ## 面试可能问
