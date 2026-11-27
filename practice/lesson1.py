@@ -39,6 +39,7 @@ import json
 with open("data/orders.json", encoding="utf-8") as f:
     orders = json.load(f)
 
+print(orders)
 print(type(orders))
 print(len(orders))
 
