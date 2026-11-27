@@ -197,9 +197,76 @@ else:
 
 ---
 
+## 第 3 课：类与对象
+
+### 1. 类和对象
+
+**是什么**：类是一个模具，规定"这种东西有什么数据、能做什么"；对象是用模具造出来的一个个具体的东西。
+
+**解决什么问题**：把"数据"和"操作数据的函数"装进同一个盒子，不用让一堆函数共用散落在外面的变量。比如 `OrderStore` 把订单数据和查订单、列订单的方法放在一起。
+
+**比喻**：月饼模具和月饼。一个模具能压出很多月饼，每个月饼的馅可以不一样。
+
+**常用代码**
+```python
+class OrderStore:                       # 类名首字母大写
+    def __init__(self, path):           # 创建对象时自动执行，"出厂设置"
+        with open(path, encoding="utf-8") as f:
+            self.orders = json.load(f)  # 属性：对象长期记住的数据
+
+    def list_orders(self, customer_id): # 方法：第一个参数永远是 self
+        ...
+
+store = OrderStore("data/orders.json")  # 造一个对象，self 不用自己传
+store.list_orders("C1001")              # 用 . 调用方法
+store.orders                            # 用 . 取属性
+```
+- `self` 指"这个对象自己"。
+- **什么该挂在 `self` 上**：对象要长期记住的东西（比如仓库里的 `self.orders`）。只在某一次调用里临时用的（比如这次查询的订单号），用普通变量就行。
+
+**踩过的坑**：
+- 类里的方法忘了写 `self`，报 `TypeError: Bad.hello() takes 1 positional argument but 2 were given`。原因：调用时 Python 会自动把对象本身传进去当第一个参数。解决：每个方法第一个参数都写 `self`。
+- 作业里写了 `self.order_id = order_id.strip()`，下一行用的却是 `order_id`，`strip` 白做了。而且订单号只是这次查询用的，不该挂在 `self` 上。解决：改成普通变量 `order_id = order_id.strip()`。
+
+**我的理解**：类是模具，对象是用这个模具做出来的具体成品（实例），就像月饼模具和压出来的每个月饼。类的作用是把“数据（属性）”和“操作这些数据的函数（方法）”装在一起，比如 OrderStore 里既装了订单数据 self.orders，也装了查订单、列订单、算总额这些方法。只有需要对象长期保存、多个方法共用的数据才写成 self.xxx，只在当前方法里临时用一下的变量直接用普通变量就行。
+
+---
+
+### 2. 遍历字典与 `+=` 累加
+
+**是什么**：`for` 直接遍历字典只拿到键；用 `.items()` 每次拿到一对（键, 值），`for` 后面写两个变量把它拆开。`+=` 是"在原来基础上加"。
+
+**解决什么问题**：要从字典里按条件筛出一部分（某个客户的所有订单号），或者把它们的金额加起来。
+
+**比喻**：一排储物柜。直接 `for` 只看到柜号；`.items()` 是管理员每次递给你一个托盘，左边放柜号，右边放柜里的东西。`+=` 像往存钱罐里一笔一笔投钱。
+
+**常用代码**
+```python
+for order_id in orders:                     # 只拿到键（柜号）
+    ...
+for order_id, order in orders.items():      # 键和值一起拿
+    if order["customer_id"] == customer_id: # 判断用右手（值）
+        result.append(order_id)             # 收集左手（键）
+
+total = 0                                   # 先拿个空罐子
+for order_id, order in orders.items():
+    total += order["total"]                 # 等于 total = total + order["total"]
+```
+
+**踩过的坑**：
+- 作业里写 `for order in self.orders:` 然后用 `order["customer_id"]`，报 `TypeError: string indices must be integers, not 'str'`。原因：直接遍历字典拿到的是键（字符串 `"SO20261101"`），不是订单字典。解决：改成 `for order_id, order in self.orders.items():`。
+- 变量名用了 `list`，把 Python 自带的 `list` 盖掉了。解决：换成 `result`、`order_ids` 这种名字。
+
+**我的理解**：直接 for x in orders: 遍历字典时，x 拿到的只是键（key，比如订单号字符串），相当于只拿到储物柜编号、没拿到里面的东西，所以直接取值会报 TypeError；加上 .items() 后，for a, b in orders.items(): 每次能同时拿到键和值，a 是键（订单号），b 是对应的值（订单详情字典）。total += 5 等价于 total = total + 5，就是把原来的值加上 5 再存回 total。
+
+---
+
 ## 面试可能问
 1. 字典用 `d["key"]` 和 `d.get("key")` 取值有什么区别？
 2. JSON 和 Python 字典是一回事吗？
 3. 函数里 `print` 和 `return` 有什么区别？
 4. 查询订单时，"订单不存在"和"不是你的订单"为什么要给用户一样的提示？
 5. `try` 块里为什么不要放太多代码？`else` 有什么用？
+6. 类和对象是什么关系？`self` 是什么？
+7. 什么数据应该存成 `self.xxx`，什么用普通变量就行？
+8. 把数据和函数装进一个类（比如 `OrderStore`），比全局变量加函数好在哪？
